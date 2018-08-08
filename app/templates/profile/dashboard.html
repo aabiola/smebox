@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <!--- Begin the contents for this page --->
+              <h1>Hello, {{ current_user.org_name }}!</h1>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+                    <div class="row" style="margin-bottom:20px;">
+                        <div class="col-md-5 col-sm-5 col-xs-12 gutter">
+
+                            <div class="sales">
+                                <h2>Your Recent Experiment</h2><br><br>
+<p>Testing Wireshark Capture on Low Bandwidth</p>
+                               <canvas id="myChart" width="300" height="300"></canvas>
+                            </div> 
+                            
+                        </div>
+                        <div class="col-md-7 col-sm-7 col-xs-12 gutter">
+
+                            <div class="sales" style="background-color:white;">
+                                <div style="overflow:auto;margin-bottom:20px;"><h2>Report</h2></div>
+                                 
+                                 <div class="table-responsive">
+                                <table class="table">
+                                     <tr>
+                                        <th>Experiment</th>
+                                        <th>Created</th>
+                                        <th>Usage</th>
+                                    </tr>
+
+                                    {% for someprojects in someprojects %}
+                                    <tr>
+                                        <td>{{ someprojects.project_name }} </td>
+                                        <td>{{ someprojects.project_datesetup.strftime("%c") }}</td>
+                                        <td><a href="#" class="btn btn-warning">0</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                <tr>
+                                <td>Testing Wireshark Capture on Low Bandwidth</td>
+                                <td>June 19, 2018</td>
+                                <td><a href="#" class="btn btn-success">5</a></td>
+                                </tr>
+                               
+                                </table>
+                                </div>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+
+ <!-- end contents for this page -->   
+
+{% endblock %}
+
+{% block additionalscript %}
+<!-- for chart -->
+<script>
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["Network Admin", "Coy. Server", "Developer", "General", "Attackers"],
+        datasets: [{
+            label: '# of Users',
+            data: [2, 3, 12, 5, 2],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
+{% endblock %}

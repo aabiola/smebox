@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <!--- Begin the contents for this page --->
+ <style type="text/css">
+        .custab{
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 5% 0;
+    box-shadow: 3px 3px 2px #ccc;
+    transition: 0.5s;
+    }
+.custab:hover{
+    box-shadow: 3px 3px 0px transparent;
+    transition: 0.5s;
+
+    }
+    #myProgress {
+  width: 100%;
+  background-color: #ddd;
+}
+
+#myBar {
+  width: 1%;
+  height: 30px;
+  background-color: #4CAF50 /*#d43f3a;*/
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
+
+    </style>
+    
+                <h1>Hello, {{ current_user.org_name }}!</h1>
+                    <div class="row">
+                        
+                        <div class="col-md-12 col-sm-12 col-xs-12 gutter">
+
+
+                            <div class="sales" style="background-color:white;">
+                             
+                            
+  
+   <div class="row col-md-12 custyle">
+
+   {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class='alert alert-info'>
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+ <div id="feedback"></div>
+
+ <div id="myProgress" style="display:none">
+  <div id="myBar">10%</div>
+</div>
+
+
+    <table class="table table-striped custab">
+    <thead>
+        <tr>
+            <!-- <th>ID</th> -->
+            <th>Experiment Title</th>
+             <th>Template</th>
+            <th>Parameters</th>
+            <th class="text-center">Action</th>
+        </tr>
+    </thead>
+     {% set serial = 0 %}
+    
+     {% for myprojects in myprojects %}
+     
+     {% set serial = serial+ 1 %}
+     
+            <tr>
+               <!--  <td>{{ serial }}</td> -->
+                <td title="{{ myprojects.Project.project_details }}">{{ myprojects.Project.project_name }}</td>
+                <td>{{ myprojects.industry_name }}</td>
+                <td><span><a href="#" data-toggle="modal" data-target="#myModal">{{ myprojects.Project.project_totalnodes }} Nodes</a></span>&nbsp;&nbsp;&nbsp;<span><a href="#">{{ myprojects.Project.project_corenodes }} Core Users on {{ myprojects.Project.project_coreos }}</a></span><br><span><a href="#">{{ myprojects.Project.project_generalnodes }} General Users on {{ myprojects.Project.project_generalos }}</a></span></td>
+                <td class="text-center">
+                  <a class='btn btn-info btn-xs' href="#"><span class="fa fa-edit"></span> Edit</a> 
+                  <a href="#" class="btn btn-danger btn-xs"><span class="fa fa-trash"></span> Del</a>
+                  &nbsp;
+                   {% if myprojects.Project.project_status == 'active' %}
+                   <a href="javascript:void(0);" class='btn btn-success btn-xs launchlink' onclick="sendme({{ myprojects.Project.id }})"> <span class="fa fa-rocket"></span> Launch </a>
+                  
+                  <!-- <a class='btn btn-success btn-xs' href="{{ url_for('profile.launch_project', id=myprojects.Project.id) }}"><span class="fa fa-rocket"></span> Launch</a> -->
+                    {% else %}
+                        <a class='btn btn-default btn-xs' href="#"> Pending</a>
+                    {% endif %}
+                 
+                </td>
+            </tr>
+     
+           
+       {% endfor %}
+         
+           
+    </table>
+    </div>
+
+
+        
+                            </div>
+                        </div>
+                    </div>
+
+ <!-- end contents for this page -->   
+
+{% endblock %}
+
+{% block additionalscript %}
+
+<!-- start modal -->
+
+ <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">User Behaviour: Emulated Tasks</h4>
+        </div>
+        <div class="modal-body">
+          <p>Developer Tasks</p>
+          
+          <div class="row">
+              <div class="col-xs-8 col-sm-6">
+              
+               <div class="checkbox">
+    <label>
+      <input type="checkbox" checked="checked"> Connect to IDE
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Launch Browser
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Open Github
+    </label>
+  </div>
+   <div class="checkbox">
+    <label>
+      <input type="checkbox"> Launch Email
+    </label>
+  </div>
+              </div>
+              <div class="col-xs-4 col-sm-6">
+                
+                
+                 <div class="checkbox">
+    <label>
+      <input type="checkbox" checked="checked"> Connect to IDE
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Launch Browser
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Open Github
+    </label>
+  </div>
+   <div class="checkbox">
+    <label>
+      <input type="checkbox"> Launch Email
+    </label>
+  </div>
+  
+              </div>
+            </div>
+            
+            
+            
+            
+           <strong> <p>Secretariat Tasks</p></strong>
+          
+          <div class="row">
+              <div class="col-xs-8 col-sm-6">
+              
+               <div class="checkbox">
+    <label>
+      <input type="checkbox" checked="checked"> Send Email
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" checked="checked"> Launch Browser
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" checked="checked"> Type LibreOffice
+    </label>
+  </div>
+   <div class="checkbox">
+    <label>
+      <input type="checkbox" checked="checked"> Open Excel
+    </label>
+  </div>
+              </div>
+              <div class="col-xs-4 col-sm-6">
+                
+                
+                 <div class="checkbox">
+    <label>
+      <input type="checkbox" checked="checked" checked="checked"> Find & Replace
+    </label>
+  </div>
+   
+  
+   <div class="checkbox">
+    <label>
+      <input type="checkbox"> Attach Email
+    </label>
+  </div>
+  
+              </div>
+            </div>
+   
+   
+            
+        <p>Network Admin</p>
+          
+          <div class="row">
+              <div class="col-xs-8 col-sm-6">
+              
+               <div class="checkbox">
+    <label>
+      <input type="checkbox" checked="checked"> Open Wireshark
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Set Firewall Rule
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Shut down network
+    </label>
+  </div>
+   <div class="checkbox">
+    <label>
+      <input type="checkbox"> Launch Email
+    </label>
+  </div>
+              </div>
+             
+            </div>
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-range" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+<!-- end modal -->
+
+<script type="text/javascript">
+  function sendme(pid){
+    //alert(pid)   
+      $.ajax({
+        type: "GET",
+        url: "http://127.0.0.1:5000/profile/launch/" + pid,
+        beforeSend:function(){},
+        success: function(msg){
+          projectid = msg.id;
+          text = msg.text;
+          console.log(msg);
+          if(projectid){
+            //display a progresss bar and sleep for 3mins before redirecting
+            $('#feedback').html(text)
+            $('#myProgress').css('display','block')
+            $('.launchlink').css('display','none')
+            move()
+
+            setTimeout(function(){
+              document.location.href="http://127.0.0.1:5000/profile/instances/"+projectid
+            }, 180000);
+
+          
+           
+           
+          }else{
+            $('#feedback').html(text)
+            $('#feedback').addClass('alert alert-danger')
+
+          }
+          
+        },
+        error: function(error) {
+                console.log(error);
+        }
+      });
+    }
+ 
+
+
+function move() {
+  var elem = document.getElementById("myBar");   
+  var width = 1;
+  var id = setInterval(frame, 1800);
+  function frame() {
+    if (width >= 100) {
+      clearInterval(id);
+    } else {
+      width++; 
+      elem.style.width = width + '%'; 
+      elem.innerHTML = width * 1  + '%';
+    }
+  }
+}
+
+</script>
+
+{% endblock %}

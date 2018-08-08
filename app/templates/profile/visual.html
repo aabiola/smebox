@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <!--- Begin the contents for this page --->
+
+ <style type="text/css">
+        .custab{
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 5% 0;
+    box-shadow: 3px 3px 2px #ccc;
+    transition: 0.5s;
+    }
+.custab:hover{
+    box-shadow: 3px 3px 0px transparent;
+    transition: 0.5s;
+
+    }
+    </style>
+    
+                <h1>Hello, {{ current_user.org_name }}! </h1>
+					<p class="lead">Experiment '{{ deets.Project.project_name }}' Started at {{ deets.ProjectInstance.instance_start.strftime("%c") }} at IP Address Range: {{ deets.ProjectInstance.instance_iprange  }} <a href="{{ url_for('profile.stop_instance', id=deets.ProjectInstance.instance_id) }}" class="btn btn-danger">Stop Operation</a></p>
+                    <div class="row">
+                        
+                        <div class="col-md-12 col-sm-12 col-xs-12 gutter">
+
+                            <div class="salesxx" style="background-color:white;">
+
+                <ul class="list-group">
+                     <li class="list-group-item">
+                        <div class="row">
+                          
+                             
+                            <div class="col-xs-12 col-md-12">
+                                <div>
+                                   <p> {{ deets.Project.project_totalnodes }} User Workstations Running as follows ... </p>
+                                    <div class="mic-info">
+                                       {% if deets.Project.project_coreos =='Windows' %} <i class="fa fa-windows"></i> {% else %}  <i class="fa fa-linux"></i> {% endif %} &nbsp;&nbsp;&nbsp; {{ deets.Project.project_corenodes }} Core Operations Tasks on <b>{{ deets.Project.project_coreos }}</b>
+                                    </div>
+                                     
+                                    <div class="mic-info">
+                                        {% if deets.Project.project_generalos =='Windows' %} <i class="fa fa-windows"></i> {% else %}  <i class="fa fa-linux"></i> {% endif %}  &nbsp;&nbsp;&nbsp; {{ deets.Project.project_generalnodes }} General Tasks on <b>{{ deets.Project.project_generalos }}</b>
+                                        
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </li>
+
+				<li class="list-group-item">
+                        <div class="row">
+                             
+                            <div class="col-xs-11 col-md-11">
+							  <div class="mic-info">
+                                       
+                                    </div>
+									
+                               <div class="mic-info">
+                                        Template <a href="#"> {{ deets.Industry.industry_name }}</a>
+                                    </div>
+                                <div class="mic-info">
+                                        Bandwidth Delay <a href="#"> {{ deets.Project.project_bandwidth_delay }} Mbps</a>
+                                    </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-2 col-md-1">
+                             {% if deets.project_netos =='Windows' %}
+                                <img src="{{ url_for('static',filename='images/windows.png') }}" class="img-responsive" alt="" />
+                             {% else %}
+                              <img src="{{ url_for('static',filename='images/linux.png') }}" class="img-responsive" alt="" />
+                              {% endif %}
+                            </div>
+                            <div class="col-xs-10 col-md-11">
+                                <div>
+                                    <a href="#">
+                                        Network Admin's Monitoring System is running on IP {{ deets.ProjectInstance.instance_ipnetworkadmin }}</a>
+                                    <div class="mic-info">
+                                        Owner: <a href="#">James (Company Asset)</a>
+                                    </div>
+                                </div>
+                                <div class="comment-text">
+                                    This system runs some of the popular system admin tools such as maltego, wireshark, nmap etc
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </li>
+                     <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-2 col-md-1">
+                                <img src="{{ url_for('static',filename='images/linux.png') }}" class="img-responsive" alt="" /></div>
+                            <div class="col-xs-10 col-md-11">
+                                <div>
+                                    <a href="#">
+                                        Web Server running on the Internet at {{ deets.ProjectInstance.instance_ipwebserver }}</a>
+                                    <div class="mic-info">
+                                        Owner: <a href="#">Internet</a>
+                                    </div>
+                                </div>
+                                <div class="comment-text">
+                                    This server emulates the Internet and its outside the organisation network
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </li>
+                      <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-2 col-md-1">
+                                <img src="{{ url_for('static',filename='images/linux.png') }}" class="img-responsive" alt="" /></div>
+                            <div class="col-xs-10 col-md-11">
+                                <div>
+                                    <a href="#">
+                                        Elastic Search running on IP {{ deets.ProjectInstance.instance_ipelastic }} outside the organisation's network</a>
+                                    <div class="mic-info">
+                                        Owner: <a href="#">Internet</a>
+                                    </div>
+                                </div>
+                                <div class="comment-text">
+                                    Staff can send data [files] to this server
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </li>
+					
+					
+					
+					
+					
+					
+					<li class="list-group-item">
+					<div class='row'>
+					<div class="col-xs-10 col-md-11" style="text-align:center;">
+					<a href='{{ url_for('profile.projectlisting') }}'>Click here to Return to List of Experiment Page</a>
+                     </div>
+					 </div>
+					</li>
+					
+                </ul>
+				  
+
+                            
+                        </div>
+                    </div>
+                </div>
+           <!-- end contents for this page -->   
+
+{% endblock %}
+
+{% block additionalscript %}
+
+{% endblock %}

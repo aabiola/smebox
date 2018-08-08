@@ -1,0 +1,162 @@
+  {% import "bootstrap/utils.html" as utils %}
+{% import "bootstrap/wtf.html" as wtf %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SME-in-a-BOX:: {{ title }} </title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{url_for('static',filename='vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    
+    <link href="{{url_for('static',filename='css/secure-range.css')}}" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900|Montserrat:400,700" rel="stylesheet">
+
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: rgb(32, 60, 99); height:5em;">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('auth.homepage') }}">SME-in-a-BOX</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('auth.homepage') }}">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            
+            <li class="nav-item active">
+              <a class="nav-link" href="{{ url_for('auth.login') }}">Sign In</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+
+    <!-- Header - set the background image for the header in the line below -->
+    <header class="py-5 bg-image-header" id="mainheader">
+    
+     <div class="container">
+     <!--   <div id="overlayx"></div>  -->
+       <div class="row">
+        
+         
+        
+        <div class="col-md-6 offset-md-3">
+          <div id="banner-form">
+            <!-- JOB SEARCH FORM STARTS -->
+            
+              <h2 id='title-header'>Login to Your Account</h2>
+              
+
+{% block body %}
+ 
+  {{ utils.flashed_messages() }}
+  
+    {{ wtf.quick_form(form,action="http://127.0.0.1:5000/login", method="post") }}
+ 
+
+{% endblock %}
+<!-- <form id="signup" action='inner.html' method="post">
+              <div class="form-group">
+                <input type="text" class="form-control" name="email" placeholder="Username (Email)">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="pwd" placeholder="Password">
+              </div>
+              
+            <div class="form-group">
+                <button type="submit" class="btn btn-range-mild btn-block">Login</button>
+              </div>
+               
+
+              <div class="form-group">
+                
+                 <p class="register-link text-center">Don't have account yet? <a href="index.html">Register Now</a></p>
+              </div>
+              
+            </form> -->
+            <!-- JOB SEARCH FORM ENDS -->
+          </div>
+        </div>
+
+
+     </div> 
+     
+     </div>
+
+
+    </header>
+
+     
+
+    <!-- Content section -->
+    <section class="py-5">
+      <div class="container">
+        <h1>Our Partners</h1>
+        <p class="lead">They trust us, we are passionate about them too.</p>
+       
+<!-- carousel -->
+
+
+<div id="Carousel" class="carousel slide">
+                 
+                <ol class="carousel-indicators">
+                    <li data-target="#Carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#Carousel" data-slide-to="1"></li>
+                    <li data-target="#Carousel" data-slide-to="2"></li>
+                </ol>
+                 
+       
+                
+                 <div class="row">
+                   <div class="col-md-3 col-xs-12"><a href="#" class="thumbnail"><img src="https://vignette.wikia.nocookie.net/freakylogo/images/e/e2/Ubuntu.jpg/revision/latest?cb=20161020201654" alt="Image" style="height:80px;"></a></div>
+                   <div class="col-md-3 col-xs-12"><a href="#" class="thumbnail"><img src="http://static.cf.ac.uk/cfui/1.10.13/img/logo.png" alt="Image" style="height:80px;"></a></div>
+                   <div class="col-md-6 col-xs-12"><a href="#" class="thumbnail"><img src="https://www.opendaylight.org/wp-content/uploads/sites/14/2017/02/logo.png" alt="Image" style="height:80px;"></a></div>
+                  
+                  
+                 </div><!--.row-->
+               
+
+
+      </div>
+    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark" style="background-color:rgb(32, 60, 99)!important">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; SME-in-a-BOX Emulation Lab 2018</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{url_for('static',filename='vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{url_for('static',filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{url_for('static',filename='vendor/js/custom.js')}}"></script>
+
+
+  </body>
+
+</html>

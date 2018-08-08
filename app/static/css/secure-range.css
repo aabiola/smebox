@@ -1,0 +1,226 @@
+body {
+  padding-top: 54px;
+ font-family: 'Roboto', 'Montserrat','Lato',sans-serif;
+
+}
+
+@media (min-width: 992px) {
+  body {
+    padding-top: 56px;
+  }
+}
+#mainheader{
+  background-image: url('../images/banner-bg-2.jpg'); background-position: top; background-color: rgb(35, 35, 35);
+}
+.bg-image-full {
+  background: no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+.clearfloat{clear: both;}
+
+#form-group input{
+  background:rgba(250, 186, 45, 0.9);
+}
+#banner-form{
+background:rgba(250, 186, 45, 0.9);
+ font-family: 'Roboto', 'Montserrat',sans-serif;
+ padding: 2em ;
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: block; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+.register-link a{
+  color:#086788;
+  text-decoration: none;
+}
+
+.register-link a:hover{
+  text-decoration: underline;
+  color:rgb(18, 33, 67);
+}
+@media(max-width:768px){
+    #login-dp{
+        background-color: inherit;
+        color: #fff;
+    }
+    #login-dp .bottom{
+        background-color: inherit;
+        border-top:0 none;
+    }
+}
+#home-btn{
+	text-align: left;
+  margin-top:2em;
+}
+.btn-range{
+	background-color: rgb(32, 60, 99);
+	color:#ffffff;
+  border:1px solid rgb(229, 171, 44);
+  border-radius: 0px;
+  padding: 0.5em;
+  
+}
+.btn-range:hover{
+  background-color: rgb(229, 171, 44);
+  border:1px solid rgb(32, 60, 99);
+  color:rgb(32, 60, 99);
+  border-radius:none;
+}
+
+.btn-range-mild{
+  background-color: rgb(32, 60, 99);
+  color:#ffffff;
+  border:1px solid rgb(14, 26, 53);
+  border-radius: 0px;
+  padding: 0.5em;
+}
+.btn-range-mild:hover{
+  background-color: rgb(14, 26, 53);
+  border:1px solid rgb(18, 33, 67);
+  color:rgb(255,255,255);
+  border-radius:none;
+}
+.btn-range-invert{
+  background-color: rgb(18, 33, 67);
+  color:#ffffff;
+  border:1px solid rgb(18, 33, 67);
+  border-radius: 0px;
+  padding: 0.5em;
+}
+.btn-range-invert:hover{
+  border:1px solid #086788;
+  color:#ffffff;
+  border-radius:none;
+}
+#banner-text{
+	color:white;
+
+
+}
+#banner-text h3{
+	margin-bottom:1em;
+  font-family:'Montserrat', sans-serif;
+  font-size: 2em;
+}
+#banner-text p{
+  font-size:1.2em;
+  line-height: 1.5em;
+  font-family: 'Lato';
+  font-weight:300;
+  padding-bottom: 0.5em;
+
+}
+.box{
+  height:200px;
+  
+  background-color: #fa8334;
+
+}
+#banner-text{
+height:00px;
+}
+#title-header{
+  padding-bottom: 1em;
+  color:white;
+  font-family: 'Montserrat';
+}
+.form-group input, .form-group input:hover {
+background-color: transparent;
+border-color: rgba(255, 255, 255, 0.5);
+padding:0.5em;
+color: #FFF;
+}
+.form-group input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgb(11, 60, 73);
+    opacity: 0.5; /* Firefox */
+}
+
+.form-group input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: rgba(11, 60, 73, 0.5);
+}
+
+.form-group input::-ms-input-placeholder { /* Microsoft Edge */
+    color: rgba(11, 60, 73, 0.5);
+}
+
+input[type=text]:focus{
+    background-color: rgba(250, 186, 45, 0.2);
+}
+select option{
+  background-color: #FABA2D;
+}
+.py-5 h1 {
+
+  font-family: 'Montserrat';
+  font-size:2em;
+  padding-bottom: 1em;
+}
+
+#paralax{
+  /* The image used */
+    background-image: url('../images/enterprise.jpg');
+
+    /* Set a specific height */
+    min-height: 300px; 
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+/***** MEDIA QUERY ***/
+
+
+/*------------------------------------------
+  Responsive Grid Media Queries - 1280, 1024, 768, 480
+   1280-1024   - desktop (default grid)
+   1024-768    - tablet landscape
+   768-480     - tablet 
+   480-less    - phone landscape & smaller
+--------------------------------------------*/
+
+@media only screen and (max-width: 480px) {
+  #banner-text {
+    height:480px;
+    margin-bottom:10px;
+  }
+   #banner-text h3{
+    font-size:1.5em;
+  }
+  #banner-text p{
+    font-size:1em;
+  }
+  #banner-form h2{
+    font-size:1.5em;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #banner-text {
+    height:400px;
+    margin-bottom:10px;
+  }
+   #banner-text h3{
+    font-size:2em;
+  }
+  #banner-text p{
+    font-size:1em;
+  }
+  #banner-form h2{
+    font-size:2em;
+  }
+}

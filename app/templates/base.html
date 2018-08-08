@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">    
+
+  <title>SME-in-a-BOX Emulation Lab - {{ title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="{{url_for('static',filename='css/secure-dashboard.css')}}" rel="stylesheet">
+  <script src="{{url_for('static',filename='js/jquery-1.11.1.min.js')}}"></script>
+  <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+
+ 
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+  <style>
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+legend{
+  font-size:14px; 
+}
+</style>
+</head>
+
+
+<body class="home" style="margin:0px;padding:0px;">
+   
+    <div class="container-fluid display-table">
+        <div class="row display-table-row">
+            <div class="col-md-2 col-sm-1 hidden-xs display-table-cell v-align box" id="navigation">
+               
+                <div class="navi">
+                    <ul>
+                        <li class='active'><a href="{{ url_for('profile.dashboard') }}"><i class="fa fa-home" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Home</span></a></li>
+                        <li><a href="{{ url_for('profile.projectlisting') }}"><i class="fa fa-tasks" aria-hidden="true"></i><span class="hidden-xs hidden-sm">My Experiments</span></a></li>
+                        <li><a href="{{ url_for('profile.report') }}"><i class="fa fa-bar-chart" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Reports</span></a></li>
+                        <li><a href="{{ url_for('profile.report') }}"><i class="fa fa-cog" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Setting</span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10 col-sm-11 display-table-cell v-align">
+                <!-- <button type="button" class="slide-toggle">Slide Toggle</button>  -->
+                <div class="row">
+                    <header class="dash-header">
+                        <div class="col-md-7">
+                            <nav class="navbar-default pull-left">
+                                <div class="navbar-header">
+                                    <button type="button" class="navbar-toggle collapsed" data-toggle="offcanvas" data-target="#side-menu" aria-expanded="false">
+                                        <span class="sr-only">Toggle navigation</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                    </button>
+                                </div>
+                            </nav>
+                           <!-- <div class="search hidden-xs hidden-sm">
+                                <input type="text" placeholder="Search" id="search">
+                            </div>-->
+                        </div>
+                        <div class="col-md-5">
+                            <div class="header-rightside">
+                                <ul class="list-inline header-top pull-right">
+                                    <li class="hidden-xs"><a href="#" class="btn-range" style='color:white;' data-toggle="modal" data-target="#add_project">Create Experiment</a></li>
+                                    <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a></li>
+                                    <!-- <li>
+                                        <a href="#" class="icon-info">
+                                            <i class="fa fa-bell" aria-hidden="true"></i>
+                                            <span class="label label-primary">3</span>
+                                        </a>
+                                    </li> -->
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ url_for('static', filename='images/student.png') }}" alt="user">
+                                            <b class="caret"></b>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <div class="navbar-content">
+                                                    <span style='overflow:hidden'> {% if current_user.is_authenticated %} {{ current_user.org_email }} {% endif %}g</span>
+                                                    <p class="text-muted small">
+                                                        {% if current_user.is_authenticated %} {{ current_user.org_name }} {% endif %}
+                                                    </p>
+                                                    <div class="divider">
+                                                    </div>
+                                                    <a href="{{ url_for('auth.logout') }}" class="view btn-sm btn-range-invert">Logout</a>
+                                                    
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </header>
+                </div>
+                <div class="user-dashboard" style="padding-bottom:4em; min-height: 760px;">
+                     {% block content %}
+
+
+                       {% endblock %}
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+ 
+ 
+    <!-- Modal -->
+    <div id="add_project" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header login-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Create Experiment</h4>
+
+                </div>
+                <div class="modal-body">
+                  <div id='feedback'></div>
+<form class="form-horizontal" action="#" method="POST" id="frmproject">
+<fieldset><legend>Description</legend>
+  <div class="form-group">
+    <div class="col-sm-6">
+      <input type="text" name="projectname" class="form-control" id="projectname" placeholder="Experiment Name">
+    </div>
+    <div class="col-sm-6">
+      <input type="text" name="projdetails" class="form-control" id="projdetails" placeholder="Other Details (Optional)">
+    </div>
+  </div>
+  
+  </fieldset>
+  <fieldset>
+  
+  <legend>Environment Set Up</legend>
+  <div class="form-group">
+     <div class="col-sm-6">
+      <select class='form-control' name='projindustry' id="projindustry">
+      <option value='' selected="selected">Enterprise Template</option>
+      <option value='1'>Software Development</option>
+      <option value='2'>Finance</option>
+      <option value='3'>Law/Research/Education</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+        <div class="col-sm-6">
+      <input type="text" class="form-control" name="nodes" id="nodes" placeholder="Number of Nodes">
+    </div>
+    <div class="col-sm-6">
+      <input type="text" class="form-control" id="bandwidth" name="bandwidth" placeholder="Bandwidth">
+    </div>
+
+  </div>
+ 
+  </fieldset>
+  <fieldset><legend>User Behavior - Provide Number of Nodes for each Operating System</legend>
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-4 control-label">Core Operation</label>
+    <div class="col-sm-2">
+      <input type="number" name='corenode' id="corenode">
+    </div>
+  <div class="col-sm-6">
+  <select class="form-control" name='coreos'>
+  <option selected='selected'>Specify OS</option>
+  <option value='Windows'>Windows</option>
+  <option value='Linux'>Linux</option>
+</select>
+  </div>
+  </div>
+ 
+
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-4 control-label">General Usage</label>
+    <div class="col-sm-2">
+      <input type="number" name='generalnode' id="generalnode">
+    </div>
+  <div class="col-sm-6">
+  <select class="form-control" name='generalos'>
+ <option selected='selected'>Specify OS</option>
+  <option value='Windows'>Windows</option>
+  <option value='Linux'>Linux</option>
+</select>
+  </div>
+  </div>
+  </fieldset>
+  
+  <fieldset><legend>Network Admin - Server Type and Firewall Rules</legend>
+
+ <div class="form-group">
+  <div class="col-sm-1">
+  <input type="radio" name="networkadminos" id="networkadminos" value="Windows"> 
+  </div>
+ <div class="col-sm-5">
+   
+   Windows Server
+   </div>
+     <div class="col-sm-1">
+  <input type="radio" name="networkadminos" id="networkadminos2" value="Linux"> 
+  </div>
+ <div class="col-sm-5">
+   
+   Linux Server
+   </div>
+
+</div>
+
+<hr>
+
+  <div class="form-group">
+  <div class="col-sm-1">
+  <input type="checkbox" name="fireincoming" id="fireincoming" value="block"> 
+  </div>
+ <div class="col-sm-5">
+   
+   Block All Incoming Traffics
+   </div>
+     
+<div class="col-sm-1">
+  <input type="checkbox" name="fireoutgoing" id="fireoutgoing" value="block"> 
+  </div>
+ <div class="col-sm-5">
+   
+   Block All Outgoing Traffics
+   </div>
+</div>
+  
+  
+  <div class="form-group">
+  <div class="col-sm-1">
+  <input type="checkbox" name="fireincoming" id="fireincoming2" value="allow"> 
+  </div>
+ <div class="col-sm-5">
+   
+   Allow All Incoming Traffics
+   </div>
+     
+<div class="col-sm-1">
+  <input type="checkbox" name="fireoutgoing" id="fireoutgoing2" value="allow"> 
+  </div>
+ <div class="col-sm-5">
+   
+   Allow All Outgoing Traffics
+   </div>
+</div>
+
+  </fieldset>
+  
+    <fieldset><legend>Extra (a liitle something for you)</legend>
+ <div class="form-group">
+  
+  <div class="col-sm-1">
+  <input type="checkbox" name="extra" id="extra" value="1"> 
+  </div>
+ <div class="col-sm-10">
+   
+  Check this box to add extra traffic
+   </div>
+</div>
+  </fieldset>
+
+<div class="modal-footer">
+    <button type="button" class="btn-range-invert" data-dismiss="modal" id='closebtn'>Cancel and Close</button>
+    <button type="submit" class="btn-range" id="btnAddProject" data-dismiss="modal">Save Experiment Settings</button>
+</div>
+  </form>
+</div>       
+                
+              
+            </div>
+
+        </div>
+    </div>
+
+ <!-- Footer -->
+ 
+    <footer style='color:white;line-height: 100px; height:100px;background-color: rgb(18, 33, 67) !important;'>
+      <div class="container-fluid">
+        <p class="m-0 text-center text-white">Copyright &copy; SecureRange Emulation Lab 2018</p>
+      </div>
+    </footer>
+
+<script type="text/javascript">
+$(document).ready(function(){
+   $('[data-toggle="offcanvas"]').click(function(){
+       $("#navigation").toggleClass("hidden-xs");
+   });
+});
+
+</script>
+
+<!--- AJAX Submission for the add project popo up --->
+<script>
+  $("#btnAddProjectccc").click(function(){
+    $("#add_project").on('hide.bs.modal', function () { 
+      return false      
+      
+    });
+
+    $.ajax({
+          url: '{{ url_for("profile.addproject") }}',
+          type: 'POST',
+          dataType: 'json',
+          data: $("#frmproject").serialize(),
+          beforeSubmit: checkForm(),
+          success: function(res) {
+              //alert(res.name)
+              // Parse the JSON response
+              //var blogObj = JSON.parse(res);
+              if(res ==1){
+                $("#feedback").addClass('alert alert-info')
+                $("#feedback").html('msg')
+                 
+              }else{
+                $("#add_project").on('hide.bs.modal', function () { });
+                $("#add_project").hide()
+              }
+              
+              console.log(res);
+              
+              // Append to the template
+              //$('#listTemplate').tmpl(blogObj).appendTo('#ulist');
+ 
+          },
+          error: function(error) {
+              console.log(error);
+          }
+      });
+
+  })
+
+ 
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+$('#btnAddProject').on('click', function(e) {
+
+    e.preventDefault();
+    mydata = $("#projectname").val();
+    
+    if(mydata == ''){
+        $("#feedback").addClass('alert alert-info')
+        $("#feedback").html('msg')
+        $("#add_project").on('hide.bs.modal', function () { 
+            return false      
+      
+        });          
+    }else{
+       //hide modal and make ajax call
+       $("#feedback").removeClass('alert alert-info')
+       $("#feedback").html('')
+       $("#add_project").on('hide.bs.modal', function () { });
+       $("#add_project").hide()
+
+      
+
+      
+      $.ajax({
+        
+        url: '{{ url_for("profile.addproject") }}',
+        type: 'post',
+        dataType: 'json',
+        data: $("#frmproject").serialize(),            
+       
+        
+        success: function(json) {
+          console.log(json)
+            if (json['status']==0) {
+                alert(json['msg']);
+
+                //window.location.reload();
+            }else{
+                //alert("Success, redirect to project list");
+                window.location.href='{{ url_for("profile.projectlisting") }}';
+            }
+           
+        },
+            
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+
+    });
+
+    }
+
+  
+
+});
+});
+</script> 
+
+<!--end AJAX -->
+
+{% block additionalscript %}
+
+{% endblock %}
+</body>
+</html>
