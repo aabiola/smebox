@@ -9,13 +9,13 @@ def domstart(domainName):
 		msg = "Domain is now running on IP:11"
 	return msg
 
-def topostart(templateName,netAdminOs,extra=0):
-	#start the machines in the order: Nameserver, TemplateServer, Firewall+Router, Elastic Search, NetAdmin, Internex
+def topostart(templateName,netAdminOs):
+	#start the machines in the order: Nameserver, Firewall+Router, Internex, Core Server, Elastic Search, NetAdmin
 
 	import libvirt
 	conn = libvirt.open('qemu:///system')	
 	if netAdminOs == 'Linux':
-		netadmin = 'smenetadmin'
+		netadmin = 'netadmin'
 	else:
 		netadmin = 'winetadmin'
 	
@@ -25,47 +25,323 @@ def topostart(templateName,netAdminOs,extra=0):
 		if not ns1.isActive():
 			ns1.create()
 
-		#Firewall+Router =fireserve
-		fire = conn.lookupByName('smefire')
-		if not fire.isActive():
-			fire.create()
+		#NAT+Router =fireserve
+		natrouter = conn.lookupByName('ipnat')
+		if not natrouter.isActive():
+			natrouter.create()
 
-		#DMZ
-		dmz = conn.lookupByName('smedmz')
-		if not dmz.isActive:
-			dmz.create()
-
-		#Elastic Search =elastic
-		elas = conn.lookupByName('elastic')
-		if not elas.isActive():
-			elas.create()
-
-		#Network Admin Tool =netadmin
-		networkadmin = conn.lookupByName(netadmin)
-		if not networkadmin.isActive():
-			networkadmin.create()
 
 		#Internet =internex
-		internet = conn.lookupByName('internex')
+		internet = conn.lookupByName('internext')
 		if not internet.isActive():
 			internet.create()
+
+
 
 		#Template Organisation =temp
 		temp = conn.lookupByName(templateName)
 		if not temp.isActive():
 			temp.create()
-
-		#If Selected Extra, launch mininet
-		if extra:
-			extratraffic = conn.lookupByName('mininets')
-			if not extratraffic.isActive():
-				extratraffic.create()
+		
+		#Elastic Search =elastic
+		elk = conn.lookupByName('elk')
+		if not elk.isActive():
+			elk.create()
 
 		
+		#Network Admin Tool =netadmin
+		networkadmin = conn.lookupByName(netadmin)
+		if not networkadmin.isActive():
+			networkadmin.create()
+
 		launch_status = 1
 	except libvirt.libvirtError:
 		launch_status = 0
 	return launch_status
+
+
+
+def general_workstation_start(generalnodes,generalos):
+	total = int(generalnodes)
+	import libvirt 
+	import sys
+
+	"""To Start the workstation doing the general tasks """
+	for i in range(total):
+		varname = "machine"+str(i)
+		if generalos == 'Windows':	
+			
+
+			xmlconfig = """<domain type='kvm'>
+  <name> %s </name>
+  <title> Windows 8 (General Tasks)</title>
+  <description>General Tasks</description>
+  <memory unit='KiB'>4194304</memory>
+  <currentMemory unit='KiB'>4194304</currentMemory>
+  <vcpu placement='static'>2</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-bionic'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <hyperv>
+      <relaxed state='on'/>
+      <vapic state='on'/>
+      <spinlocks state='on' retries='8191'/>
+    </hyperv>
+    <vmport state='off'/>
+  </features>
+  <cpu mode='custom' match='exact' check='partial'>
+    <model fallback='allow'>Broadwell-noTSX-IBRS</model>
+  </cpu>
+  <clock offset='localtime'>
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+    <timer name='hypervclock' present='yes'/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <pm>
+    <suspend-to-mem enabled='no'/>
+    <suspend-to-disk enabled='no'/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/kvm-spice</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/lib/libvirt/images/win8.1.qcow2'/>
+      <target dev='hda' bus='ide'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+    <controller type='pci' index='0' model='pci-root'/>
+    <controller type='ide' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+    </controller>
+    <controller type='virtio-serial' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+    </controller>
+    <interface type='network'>
+      <source network='smenet'/>
+      <model type='rtl8139'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <serial type='pty'>
+      <target type='isa-serial' port='0'>
+        <model name='isa-serial'/>
+      </target>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='1'/>
+    </channel>
+    <input type='tablet' bus='usb'>
+      <address type='usb' bus='0' port='1'/>
+    </input>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    <graphics type='spice' autoport='yes'>
+      <listen type='address'/>
+      <image compression='off'/>
+    </graphics>
+    <sound model='ich6'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    </sound>
+    <video>
+      <model type='qxl' ram='65536' vram='65536' vgamem='16384' heads='1' primary='yes'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </video>
+    <memballoon model='virtio'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+    </memballoon>
+  </devices>
+</domain>""" % varname
+	else:
+		xmlconfig = """<domain type='kvm'>
+  <name> %s </name>
+  <title>Ubuntu 16 (General User Tasks)</title>
+  <description>General User Tasks</description>
+  <memory unit='KiB'>1048576</memory>
+  <currentMemory unit='KiB'>1048576</currentMemory>
+  <vcpu placement='static'>1</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-bionic'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <vmport state='off'/>
+  </features>
+  <cpu mode='custom' match='exact' check='partial'>
+    <model fallback='allow'>Broadwell-noTSX-IBRS</model>
+  </cpu>
+  <clock offset='utc'>
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <pm>
+    <suspend-to-mem enabled='no'/>
+    <suspend-to-disk enabled='no'/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/kvm-spice</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/lib/libvirt/images/ubuntu16.04-clone-clone.qcow2'/>
+      <target dev='vda' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+    </disk>
+    <controller type='usb' index='0' model='ich9-ehci1'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x7'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci1'>
+      <master startport='0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0' multifunction='on'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci2'>
+      <master startport='2'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x1'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci3'>
+      <master startport='4'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x2'/>
+    </controller>
+    <controller type='pci' index='0' model='pci-root'/>
+    <controller type='ide' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+    </controller>
+    <controller type='virtio-serial' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+    </controller>
+    <interface type='network'>
+      <source network='default'/>
+      <model type='rtl8139'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x09' function='0x0'/>
+    </interface>
+    <serial type='pty'>
+      <target type='isa-serial' port='0'>
+        <model name='isa-serial'/>
+      </target>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='1'/>
+    </channel>
+    <input type='tablet' bus='usb'>
+      <address type='usb' bus='0' port='1'/>
+    </input>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    <graphics type='spice' autoport='yes'>
+      <listen type='address'/>
+      <image compression='off'/>
+    </graphics>
+    <sound model='ich6'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    </sound>
+    <video>
+      <model type='qxl' ram='65536' vram='65536' vgamem='16384' heads='1' primary='yes'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </video>
+    <redirdev bus='usb' type='spicevmc'>
+      <address type='usb' bus='0' port='2'/>
+    </redirdev>
+    <redirdev bus='usb' type='spicevmc'>
+      <address type='usb' bus='0' port='3'/>
+    </redirdev>
+    <memballoon model='virtio'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x08' function='0x0'/>
+    </memballoon>
+  </devices>
+</domain>""" % varname
+	
+		conn = libvirt.open('qemu:///system')
+		dom = conn.createXML(xmlconfig, 0)
+		
+		# if conn == None:
+		# 	print('Failed to open connection to qemu:///system', file=sys.stderr)
+		# 	exit(1)
+		# dom = conn.createXML(xmlconfig, 0)
+		# if dom == None:
+		# 	print('Failed to create a domain from an XML definition.', file=sys.stderr)
+		# 	exit(1)
+		# 	print('Guest '+dom.name()+' has booted', file=sys.stderr)
+		# conn.close()
+
+	return dom
+
+
+# def topostart(templateName,netAdminOs,extra=0):
+# 	#start the machines in the order: Nameserver, TemplateServer, Firewall+Router, Elastic Search, NetAdmin, Internex
+
+# 	import libvirt
+# 	conn = libvirt.open('qemu:///system')	
+# 	if netAdminOs == 'Linux':
+# 		netadmin = 'smenetadmin'
+# 	else:
+# 		netadmin = 'winetadmin'
+	
+# 	#Nameserver =ns1
+# 	try:
+# 		ns1 = conn.lookupByName('ns1')
+# 		if not ns1.isActive():
+# 			ns1.create()
+
+# 		#Firewall+Router =fireserve
+# 		fire = conn.lookupByName('smefire')
+# 		if not fire.isActive():
+# 			fire.create()
+
+# 		#DMZ
+# 		dmz = conn.lookupByName('smedmz')
+# 		if not dmz.isActive:
+# 			dmz.create()
+
+# 		#Elastic Search =elastic
+# 		elas = conn.lookupByName('elastic')
+# 		if not elas.isActive():
+# 			elas.create()
+
+# 		#Network Admin Tool =netadmin
+# 		networkadmin = conn.lookupByName(netadmin)
+# 		if not networkadmin.isActive():
+# 			networkadmin.create()
+
+# 		#Internet =internex
+# 		internet = conn.lookupByName('internex')
+# 		if not internet.isActive():
+# 			internet.create()
+
+# 		#Template Organisation =temp
+# 		temp = conn.lookupByName(templateName)
+# 		if not temp.isActive():
+# 			temp.create()
+
+# 		#If Selected Extra, launch mininet
+# 		if extra:
+# 			extratraffic = conn.lookupByName('mininets')
+# 			if not extratraffic.isActive():
+# 				extratraffic.create()
+
+		
+# 		launch_status = 1
+# 	except libvirt.libvirtError:
+# 		launch_status = 0
+# 	return launch_status
 
 def topostop(templateName):
 	#use a loop to get all active domains and shut it down
@@ -80,27 +356,26 @@ def topostop(templateName):
 		if ns1.isActive():
 			ns1.shutdown()
 		#Firewall+Router =fireserve
-		fire = conn.lookupByName('smefire')
+		fire = conn.lookupByName('ipnat')
 		if fire.isActive():
-			fire.shutdown()
-
-		#DMZ
-		dmz = conn.lookupByName('smedmz')
-		if dmz.isActive:
-			dmz.shutdown()
+			fire.shutdown()	 
 
 		#Elastic Search =elastic
-		elas = conn.lookupByName('elastic')
+		elas = conn.lookupByName('elk')
 		if elas.isActive():
 			elas.shutdown()
 
 		#Network Admin Tool =netadmin
-		netadmin = conn.lookupByName('smenetadmin')
+		netadmin = conn.lookupByName('netadmin')
 		if netadmin.isActive():
 			netadmin.shutdown()
 
+		netadminb = conn.lookupByName('winetadmin')
+		if netadminb.isActive():
+			netadminb.shutdown()
+
 		#Internet =internex
-		internet = conn.lookupByName('internex')
+		internet = conn.lookupByName('internext')
 		if internet.isActive():
 			internet.shutdown()
 
@@ -109,10 +384,7 @@ def topostop(templateName):
 		if temp.isActive():
 			temp.shutdown()
 
-		extratraffic = conn.lookupByName('mininets')
-		if extratraffic.isActive():
-			extratraffic.shutdown()
-		
+				
 		off_status = 1
 	except libvirt.libvirtError:
 		off_status = 0

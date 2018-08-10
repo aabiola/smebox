@@ -23,7 +23,7 @@
 #myBar {
   width: 1%;
   height: 30px;
-  background-color: #4CAF50 /*#d43f3a;*/
+  background-color: #d43f3a;
   text-align: center;
   line-height: 30px;
   color: white;
@@ -79,7 +79,7 @@
                <!--  <td>{{ serial }}</td> -->
                 <td title="{{ myprojects.Project.project_details }}">{{ myprojects.Project.project_name }}</td>
                 <td>{{ myprojects.industry_name }}</td>
-                <td><span><a href="#" data-toggle="modal" data-target="#myModal">{{ myprojects.Project.project_totalnodes }} Nodes</a></span>&nbsp;&nbsp;&nbsp;<span><a href="#">{{ myprojects.Project.project_corenodes }} Core Users on {{ myprojects.Project.project_coreos }}</a></span><br><span><a href="#">{{ myprojects.Project.project_generalnodes }} General Users on {{ myprojects.Project.project_generalos }}</a></span></td>
+                <td><span><a href="#" data-toggle="modal" data-target="#myModal">Total Nodes = </a></span>&nbsp;&nbsp;&nbsp;<span><a href="#">{{ myprojects.Project.project_corenodes }} Core Users on {{ myprojects.Project.project_coreos }}</a></span><br><span><a href="#">{{ myprojects.Project.project_generalnodes }} General Users on {{ myprojects.Project.project_generalos }}</a></span></td>
                 <td class="text-center">
                   <a class='btn btn-info btn-xs' href="#"><span class="fa fa-edit"></span> Edit</a> 
                   <a href="#" class="btn btn-danger btn-xs"><span class="fa fa-trash"></span> Del</a>
@@ -123,135 +123,84 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">User Behaviour: Emulated Tasks</h4>
+         <h4 class="modal-title">User Behaviour: Emulated Tasks</h4>
         </div>
         <div class="modal-body">
-          <p>Developer Tasks</p>
-          
+          <h4>Core Operations</h4>          
           <div class="row">
-              <div class="col-xs-8 col-sm-6">
-              
-               <div class="checkbox">
+
+
+<div class="col-xs-12 col-sm-12">              
+  <div class="checkbox">
+    <label> <input type="checkbox" checked="checked">
+      Connect to IDE  
+    </label>
+  </div>
+  
+  <div class="checkbox">
     <label>
-      <input type="checkbox" checked="checked"> Connect to IDE
+      <input type="checkbox" checked="checked"> 
+      Push Codes to Remote Repository 
+    </label>
+  </div>
+   <div class="checkbox">
+    <input type="checkbox" checked="checked"> 
+    <label>
+      Check HTML Designs in Browser   
+    </label>
+  </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-12"> 
+
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" checked="checked"> 
+     Launch Browser
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox"> Launch Browser
-    </label>
-  </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox"> Open Github
+
+Edit Word Document and Push to FTP Server
     </label>
   </div>
    <div class="checkbox">
     <label>
-      <input type="checkbox"> Launch Email
-    </label>
-  </div>
-              </div>
-              <div class="col-xs-4 col-sm-6">
-                
-                
-                 <div class="checkbox">
-    <label>
-      <input type="checkbox" checked="checked"> Connect to IDE
-    </label>
-  </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox"> Launch Browser
-    </label>
-  </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox"> Open Github
-    </label>
-  </div>
-   <div class="checkbox">
-    <label>
-      <input type="checkbox"> Launch Email
+      <input type="checkbox" checked="checked">  Run Queries against Central DB
     </label>
   </div>
   
               </div>
-            </div>
-            
-            
-            
-            
-           <strong> <p>Secretariat Tasks</p></strong>
-          
-          <div class="row">
-              <div class="col-xs-8 col-sm-6">
+  </div>
+               
+  <h4>General Tasks</h4>
+    <div class="row">
+              <div class="col-xs-12 col-sm-12">
               
-               <div class="checkbox">
+  <div class="checkbox">
     <label>
-      <input type="checkbox" checked="checked"> Send Email
+      <input type="checkbox" checked="checked"> Edit Documents
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox" checked="checked"> Launch Browser
+      <input type="checkbox"> Find and Replace on Word Document
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox" checked="checked"> Type LibreOffice
+      <input type="checkbox"> Create Zipped Files from CSV
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Sort Excel Sheet
     </label>
   </div>
    <div class="checkbox">
     <label>
-      <input type="checkbox" checked="checked"> Open Excel
-    </label>
-  </div>
-              </div>
-              <div class="col-xs-4 col-sm-6">
-                
-                
-                 <div class="checkbox">
-    <label>
-      <input type="checkbox" checked="checked" checked="checked"> Find & Replace
-    </label>
-  </div>
-   
-  
-   <div class="checkbox">
-    <label>
-      <input type="checkbox"> Attach Email
-    </label>
-  </div>
-  
-              </div>
-            </div>
-   
-   
-            
-        <p>Network Admin</p>
-          
-          <div class="row">
-              <div class="col-xs-8 col-sm-6">
-              
-               <div class="checkbox">
-    <label>
-      <input type="checkbox" checked="checked"> Open Wireshark
-    </label>
-  </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox"> Set Firewall Rule
-    </label>
-  </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox"> Shut down network
-    </label>
-  </div>
-   <div class="checkbox">
-    <label>
-      <input type="checkbox"> Launch Email
+      <input type="checkbox"> Arrange PDF Files
     </label>
   </div>
               </div>

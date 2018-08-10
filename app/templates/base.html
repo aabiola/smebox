@@ -43,6 +43,7 @@ legend{
                         <li><a href="{{ url_for('profile.projectlisting') }}"><i class="fa fa-tasks" aria-hidden="true"></i><span class="hidden-xs hidden-sm">My Experiments</span></a></li>
                         <li><a href="{{ url_for('profile.report') }}"><i class="fa fa-bar-chart" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Reports</span></a></li>
                         <li><a href="{{ url_for('profile.report') }}"><i class="fa fa-cog" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Setting</span></a></li>
+                    
                     </ul>
                 </div>
             </div>
@@ -69,6 +70,7 @@ legend{
                             <div class="header-rightside">
                                 <ul class="list-inline header-top pull-right">
                                     <li class="hidden-xs"><a href="#" class="btn-range" style='color:white;' data-toggle="modal" data-target="#add_project">Create Experiment</a></li>
+
                                     <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a></li>
                                     <!-- <li>
                                         <a href="#" class="icon-info">
@@ -115,11 +117,13 @@ legend{
     </div>
 
 
- 
+
  
     <!-- Modal -->
-    <div id="add_project" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+
+
+          <div class="modal fade bs-example-modal-lg" tabindex="-1" id="add_project" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
 
             <!-- Modal content-->
             <div class="modal-content">
@@ -131,22 +135,29 @@ legend{
                 <div class="modal-body">
                   <div id='feedback'></div>
 <form class="form-horizontal" action="#" method="POST" id="frmproject">
-<fieldset><legend>Description</legend>
-  <div class="form-group">
-    <div class="col-sm-6">
-      <input type="text" name="projectname" class="form-control" id="projectname" placeholder="Experiment Name">
+<fieldset><legend><h4>Description</h4></legend>
+  <p class="text-muted">This is where you do the basic set up, supplying settings or configuration that can be saved and you wouldn't need to repeat this step every time you need such configuration for your experiment</p>
+
+<div class="form-group">
+
+    <label for="inputprojectname" class="col-sm-2 control-label">Experiment Name</label>
+    <div class="col-sm-4">
+      <input type="text" name="projectname" class="form-control" id="projectname" placeholder="Something to Describe this config">
     </div>
-    <div class="col-sm-6">
-      <input type="text" name="projdetails" class="form-control" id="projdetails" placeholder="Other Details (Optional)">
+     <label for="inputprojdetails" class="col-sm-2 control-label">Details</label>
+    <div class="col-sm-4">
+      <input type="text" name="projdetails" class="form-control" id="projdetails" placeholder="Optional Details">
     </div>
   </div>
   
   </fieldset>
   <fieldset>
   
-  <legend>Environment Set Up</legend>
+  <legend><h4>Environment Set Up</h4></legend>
+  <p class="text-muted">Determine the type of activities that will go on in your <i>Experimental</i> organisation by selecting an appropriate template and machine specification(s)</p>
   <div class="form-group">
-     <div class="col-sm-6">
+    <label for="inputprojindustry" class="col-sm-2 control-label">Select Template</label>
+     <div class="col-sm-4">
       <select class='form-control' name='projindustry' id="projindustry">
       <option value='' selected="selected">Enterprise Template</option>
       <option value='1'>Software Development</option>
@@ -154,27 +165,28 @@ legend{
       <option value='3'>Law/Research/Education</option>
       </select>
     </div>
+    <label for="inputbandwidth" class="col-sm-2 control-label">Bandwidth Delay</label>
+     <div class="col-sm-4">
+      <select class='form-control' name='bandwidth' id="bandwidth">
+      <option value='0'>No Delay</option>
+      <option value='100'>100 mbps</option>
+      <option value='1000'>1,000 mbps</option>
+      </select>
   </div>
-  <div class="form-group">
-        <div class="col-sm-6">
-      <input type="text" class="form-control" name="nodes" id="nodes" placeholder="Number of Nodes">
-    </div>
-    <div class="col-sm-6">
-      <input type="text" class="form-control" id="bandwidth" name="bandwidth" placeholder="Bandwidth">
-    </div>
-
   </div>
  
   </fieldset>
-  <fieldset><legend>User Behavior - Provide Number of Nodes for each Operating System</legend>
+  <fieldset><legend><h4>User Behavior - Provide Number of Nodes for each Operating System</h4></legend>
+  <p class="text-muted">The Core Operations are the user activities relevant to the Business Process of the organisation, it is dependent on the Template Chosen above. General Usage are not template specific</p>
   <div class="form-group">
-    <label for="inputEmail3" class="col-sm-4 control-label">Core Operation</label>
+    <label for="inputcorenode" class="col-sm-4 control-label">How many users doing Core Operation?</label>
     <div class="col-sm-2">
-      <input type="number" name='corenode' id="corenode">
+      <input type='text' name='corenode' id="corenode">
     </div>
   <div class="col-sm-6">
+
   <select class="form-control" name='coreos'>
-  <option selected='selected'>Specify OS</option>
+  <option selected='selected'>On what Operating System?</option>
   <option value='Windows'>Windows</option>
   <option value='Linux'>Linux</option>
 </select>
@@ -183,9 +195,9 @@ legend{
  
 
   <div class="form-group">
-    <label for="inputEmail3" class="col-sm-4 control-label">General Usage</label>
+    <label for="inputgeneralnode" class="col-sm-4 control-label">How many users  doing other tasks?</label>
     <div class="col-sm-2">
-      <input type="number" name='generalnode' id="generalnode">
+      <input type="text" name='generalnode' id="generalnode">
     </div>
   <div class="col-sm-6">
   <select class="form-control" name='generalos'>
@@ -195,10 +207,34 @@ legend{
 </select>
   </div>
   </div>
+  <hr>
+  <div class="form-group">
+  <!--- Extra Traffic Checkbox -->
+  <div class="col-sm-1">
+  <input type="checkbox" name="extra" id="extra" value="1"> 
+  </div>
+ <div class="col-sm-3">   
+ <label>Add Extra Traffic</label>
+   </div>
+<!--- Malicious Insider -->
+<div class="col-sm-1">
+  <input type="checkbox" name="insider" id="insider" value="1"> 
+  </div>
+ <div class="col-sm-3">   
+  <label class='text-danger'>Add Malicious Insider</label>
+   </div>
+   <!---Malicious Outsider --->
+   <div class="col-sm-1">
+  <input type="checkbox" name="outsider" id="outsider" value="1"> 
+  </div>
+ <div class="col-sm-3">   
+  <label class='text-danger'>Add Malicious Outsider</label>
+   </div>
+</div>
   </fieldset>
   
-  <fieldset><legend>Network Admin - Server Type and Firewall Rules</legend>
-
+  <fieldset><legend><h4>Network Admin Platform </h4></legend>
+  <p class="text-muted">You will have access to some monitoring tools here, please choose your favourite Operating System</p>
  <div class="form-group">
   <div class="col-sm-1">
   <input type="radio" name="networkadminos" id="networkadminos" value="Windows"> 
@@ -217,60 +253,8 @@ legend{
 
 </div>
 
-<hr>
-
-  <div class="form-group">
-  <div class="col-sm-1">
-  <input type="checkbox" name="fireincoming" id="fireincoming" value="block"> 
-  </div>
- <div class="col-sm-5">
-   
-   Block All Incoming Traffics
-   </div>
-     
-<div class="col-sm-1">
-  <input type="checkbox" name="fireoutgoing" id="fireoutgoing" value="block"> 
-  </div>
- <div class="col-sm-5">
-   
-   Block All Outgoing Traffics
-   </div>
-</div>
-  
-  
-  <div class="form-group">
-  <div class="col-sm-1">
-  <input type="checkbox" name="fireincoming" id="fireincoming2" value="allow"> 
-  </div>
- <div class="col-sm-5">
-   
-   Allow All Incoming Traffics
-   </div>
-     
-<div class="col-sm-1">
-  <input type="checkbox" name="fireoutgoing" id="fireoutgoing2" value="allow"> 
-  </div>
- <div class="col-sm-5">
-   
-   Allow All Outgoing Traffics
-   </div>
-</div>
-
   </fieldset>
   
-    <fieldset><legend>Extra (a liitle something for you)</legend>
- <div class="form-group">
-  
-  <div class="col-sm-1">
-  <input type="checkbox" name="extra" id="extra" value="1"> 
-  </div>
- <div class="col-sm-10">
-   
-  Check this box to add extra traffic
-   </div>
-</div>
-  </fieldset>
-
 <div class="modal-footer">
     <button type="button" class="btn-range-invert" data-dismiss="modal" id='closebtn'>Cancel and Close</button>
     <button type="submit" class="btn-range" id="btnAddProject" data-dismiss="modal">Save Experiment Settings</button>

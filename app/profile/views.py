@@ -38,23 +38,24 @@ def addproject():
 	projectname = request.form['projectname']
 	projdetails = request.form['projdetails']
 	projindustry = request.form['projindustry']
-	nodes = request.form['nodes']
+	#nodes = request.form['nodes']
 	bandwidth = request.form['bandwidth']
 	corenode = request.form['corenode']
 	coreos = request.form['coreos']
 	generalnode = request.form['generalnode']
 	generalos = request.form['generalos']
-	networkadminos = request.form['networkadminos']
-	fireincoming = request.form['fireincoming']
-	fireoutgoing = request.form['fireoutgoing']
-
+	
 	extra = request.form['extra']
+	outsider = request.form['outsider']
+	insider = request.form['insider']
+
+	networkadminos = request.form['networkadminos']
  
 	project = Project(project_name=projectname, project_details=projdetails, project_industryid=projindustry,
 		project_status='active',project_orgid=loggedin_user, project_netos  =networkadminos,
-		project_bandwidth_delay=bandwidth,project_totalnodes =nodes,project_corenodes =corenode,
+		project_bandwidth_delay=bandwidth,project_corenodes =corenode,
 		project_coreos =coreos, project_generalnodes=generalnode,project_generalos =generalos,
-		project_extratraffic =extra,project_firewallin =fireincoming,project_firewallout =fireoutgoing)
+		project_extratraffic =extra,insider_threat =insider,outsider_threat =outsider)
 	
 	
 	#db.session.commit()
@@ -99,6 +100,8 @@ def projectlisting():
 @login_required
 def launch_project(id):
 	import fxn
+	import time
+	
 	from flask import Flask, jsonify
 
 	if current_user.is_authenticated:
@@ -110,31 +113,43 @@ def launch_project(id):
 	# TODO: 
 	# Connect to KVM, start the network and get the relevant IP addresses for this instance
 	# Insert an instance and insert the start time, update server config and any other thing worth storing about the instance
-	templatedeets = db.session.query(Project.project_name, Project.project_netos, Project.project_corenodes,Project.project_coreos, Project.project_generalnodes, Project.project_generalos, Project.project_extratraffic, Project.project_firewallin, Project.project_firewallout,Industry.industry_serverip).join(Industry).filter(Project.project_orgid == loggedin_user).filter(Project.id == id).first()
+	templatedeets = db.session.query(Project.project_name, Project.project_netos, Project.project_corenodes,Project.project_coreos, Project.project_generalnodes, Project.project_generalos, Project.project_extratraffic, Project.insider_threat,Project.outsider_threat,Industry.industry_serverip).join(Industry).filter(Project.project_orgid == loggedin_user).filter(Project.id == id).first()
+
+
+	
 
 	#variable with the project
 	projectid = id
-	templatename = templatedeets.industry_serverip
-	projectname = templatedeets.project_name
-	netadminos = templatedeets.project_netos
+
+	# How many corenodes? Which OS?
+	# How many general nodes? Which OS?
+
 	corenodes = templatedeets.project_corenodes
 	coreos = templatedeets.project_coreos
 	generalnodes = templatedeets.project_generalnodes
 	generalos = templatedeets.project_generalos
+
+
+	templatename = templatedeets.industry_serverip
+	projectname = templatedeets.project_name
+	
+
+	netadminos = templatedeets.project_netos
+	
+
 	extra = templatedeets.project_extratraffic
-	firewallin = templatedeets.project_firewallin
-	firewallout = templatedeets.project_firewallout
+	insider = templatedeets.insider_threat 
+	outsider = templatedeets.outsider_threat 
 
 	#contstants for the lab setup, servers with fixed IP
 
 	#External
-	webserverip = '192.168.250.2' #internex
+	webserverip = '131.250.250.3' #internex
 	elasticip = '192.168.150.2'
 	networkadminip = '192.168.100.9'
 	
 	#Internal Servers with Fixed IP
-	dmz = '192.168.100.8'
-	dhcp = '192.168.100.3' #nsserver
+	dhcp = '192.168.100.2' #nsserver
 
 	#Internal server
 	coreop = templatename + ".smebox.net"
@@ -142,14 +157,25 @@ def launch_project(id):
 	# #internal workstation range as set up and received from KVM
 	workstations = "4-19" #this is an example generated IP for an SME with 15 workstations, Ip address starts from 4 after the coreop 192.168.0.4-19
 
-	domain = fxn.topostart(templatename,netadminos,extra);
-	#domain = 1
-	if domain:
+	#domain = fxn.topostart(templatename,netadminos)
+
+	#time.sleep(360)
+
+	#core_workstations = fxn.core_workstation_start(corenodes,coreos)
+
+	#time.sleep(360)
+
+	general_workstations = fxn.general_workstation_start(generalnodes,generalos)
+
+	time.sleep(360)
+
+	domain = 1
+	if domain :
+
+		#start the  workstations and malicious users
 
 	#insert into db (instance table)
-	 	myinstance = ProjectInstance(instance_iprange=workstations, instance_ipwebserver=webserverip,
-	 		instance_ipelastic=elasticip,instance_ipnetworkadmin=networkadminip, instance_ipdhcp =dhcp,
-	 		instance_ipdmz=dmz,instance_ipcore =coreop,instance_projectid =projectid)
+	 	myinstance = ProjectInstance(instance_projectid =projectid)
 
 	 	db.session.add(myinstance)
 	 	db.session.commit()

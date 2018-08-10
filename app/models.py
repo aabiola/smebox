@@ -170,9 +170,11 @@ class Project(db.Model): # parent
     #
     project_extratraffic = db.Column(db.Integer)
 
-    #firewall settings
-    project_firewallin = db.Column(db.String(100))
-    project_firewallout = db.Column(db.String(100))
+    #More Human Behaviours, to know which Kali Linux to launch
+    insider_threat = db.Column(db.Integer)
+    outsider_threat = db.Column(db.Integer)
+
+    collection_pointip = db.Column(db.String(100))
 
 
 
@@ -189,14 +191,14 @@ class ProjectInstance(UserMixin, db.Model): #child
     instance_start = db.Column(db.TIMESTAMP,nullable=False)
     instance_end = db.Column(db.TIMESTAMP)
 
-    #settings generated dynamically for each instance/launch
-    instance_iprange = db.Column(db.String(100)) #records the Ip address range used for all the workstations
-    instance_ipwebserver = db.Column(db.String(100)) #the Ip address of the webserver (emulating the internet)
-    instance_ipelastic = db.Column(db.String(100)) #the Ip address of the elastic search (outside the network)
-    instance_ipnetworkadmin = db.Column(db.String(100)) #the Ip address of the network monitoring tools (can be viewed to monitor activities on the network during the launch)
-    instance_ipdhcp = db.Column(db.String(100)) #the Ip address of the DHCP/DNS/Firewall server (directly protecting the network, )\
-    instance_ipdmz = db.Column(db.String(100)) #the Ip address of the Firewall server sitting in the DMZ 
-    instance_ipcore = db.Column(db.String(100)) #the Ip address of the server used in the enterprise for its core operations.
+    #settings generated dynamically for each instance/launch - no longer needed, as the IP addresses have been given statically and there is no need to get the IP addresses given to the workstation instances
+    # instance_iprange = db.Column(db.String(100)) #records the Ip address range used for all the workstations
+    # instance_ipwebserver = db.Column(db.String(100)) #the Ip address of the webserver (emulating the internet)
+    # instance_ipelastic = db.Column(db.String(100)) #the Ip address of the elastic search (outside the network)
+    # instance_ipnetworkadmin = db.Column(db.String(100)) #the Ip address of the network monitoring tools (can be viewed to monitor activities on the network during the launch)
+    # instance_ipdhcp = db.Column(db.String(100)) #the Ip address of the DHCP/DNS/Firewall server (directly protecting the network, )\
+    # instance_ipdmz = db.Column(db.String(100)) #the Ip address of the Firewall server sitting in the DMZ 
+    # instance_ipcore = db.Column(db.String(100)) #the Ip address of the server used in the enterprise for its core operations.
 
     #relationships
     instance_projectid = db.Column(db.Integer, db.ForeignKey('sec_project.id'),nullable=False)
