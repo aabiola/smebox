@@ -157,20 +157,21 @@ def launch_project(id):
 	# #internal workstation range as set up and received from KVM
 	workstations = "4-19" #this is an example generated IP for an SME with 15 workstations, Ip address starts from 4 after the coreop 192.168.0.4-19
 
-	#domain = fxn.topostart(templatename,netadminos)
+	domain = fxn.topostart(templatename,netadminos)
+
+	time.sleep(30)
+
+	if corenodes:
+		core_workstations = fxn.core_workstation_start(templatename,corenodes,coreos)
+
+	time.sleep(30)
+	if generalnodes:
+		general_workstations = fxn.general_workstation_start(generalnodes,generalos)
 
 	#time.sleep(360)
 
-	#core_workstations = fxn.core_workstation_start(corenodes,coreos)
-
-	#time.sleep(360)
-
-	general_workstations = fxn.general_workstation_start(generalnodes,generalos)
-
-	time.sleep(360)
-
-	domain = 1
-	if domain :
+	#domain = 1
+	if domain  and general_workstations and core_workstations:
 
 		#start the  workstations and malicious users
 
@@ -190,6 +191,7 @@ def launch_project(id):
 	else:
 		msgstr = "Oops, we could not launch the experiment: <b>" + projectname + "</b>, at this time as the machines didn't start. Please try again"
 		return(jsonify({'text': msgstr, 'id': 0}))
+		#TODO shut down any machine that might have started
 	 	
 	
 
