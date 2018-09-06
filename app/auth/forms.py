@@ -11,7 +11,7 @@ class RegistrationForm(FlaskForm):
     coyname = StringField('Company or Individual Name', validators=[DataRequired()], render_kw={"placeholder": "Company or Individual Name"})
     email = StringField('Email', validators=[DataRequired(), Email()], render_kw={"placeholder": "Email"})
     phone = StringField('Phone Number', validators=[DataRequired()],render_kw={"placeholder": "Phone Number"})
-    industry = SelectField(u'Industry', choices=[(0,'Please Select'),(1, 'Education'), (2, 'Government'), (3, 'Private')],coerce=int)
+    industry = SelectField(u'Industry', choices=[(0,'Please Select'),(1, 'Software Development Company'), (2, 'Surgery'), (3, 'Law Firm')],coerce=int)
     
     pwd = PasswordField('Password',render_kw={"placeholder": "Password"})
     cpass = PasswordField('Confirm Password', validators=[

@@ -45,11 +45,26 @@ def addproject():
 	generalnode = request.form['generalnode']
 	generalos = request.form['generalos']
 	
-	extra = request.form['extra']
-	outsider = request.form['outsider']
-	insider = request.form['insider']
+	if "extra" in request.form:
+		extra = request.form['extra']
+	else:
+		extra = 0
 
-	networkadminos = request.form['networkadminos']
+	if "outsider" in request.form:
+		outsider = request.form['outsider']
+	else:
+		outsider = 0
+
+	if "insider" in request.form:
+		insider = request.form['insider']
+	else:
+		insider = 0
+	
+	if "netplans" in request.form:
+		networkadminos = request.form['networkadminos']
+	else:
+		networkadminos = 0
+		
  
 	project = Project(project_name=projectname, project_details=projdetails, project_industryid=projindustry,
 		project_status='active',project_orgid=loggedin_user, project_netos  =networkadminos,
@@ -82,13 +97,14 @@ def addproject():
 @profile.route('/projects') 
 @login_required
 def projectlisting():
+
     """
     Render the 
     """
     if current_user.is_authenticated:
-    	loggedin_user = current_user.get_id()
+        loggedin_user = current_user.get_id()
     else:
-    	loggedin_user = 0
+        loggedin_user = 0
     
    
     allprojects = db.session.query(Project, Industry.industry_name).join(Industry).filter(Project.project_orgid == loggedin_user).all()
@@ -101,7 +117,6 @@ def projectlisting():
 def launch_project(id):
 	import fxn
 	import time
-	
 	from flask import Flask, jsonify
 
 	if current_user.is_authenticated:
@@ -110,18 +125,17 @@ def launch_project(id):
 		loggedin_user = 0
 
 
-	# TODO: 
+    # TODO:
 	# Connect to KVM, start the network and get the relevant IP addresses for this instance
 	# Insert an instance and insert the start time, update server config and any other thing worth storing about the instance
+
 	templatedeets = db.session.query(Project.project_name, Project.project_netos, Project.project_corenodes,Project.project_coreos, Project.project_generalnodes, Project.project_generalos, Project.project_extratraffic, Project.insider_threat,Project.outsider_threat,Industry.industry_serverip).join(Industry).filter(Project.project_orgid == loggedin_user).filter(Project.id == id).first()
 
-
-	
 
 	#variable with the project
 	projectid = id
 
-	# How many corenodes? Which OS?
+    # How many corenodes? Which OS?
 	# How many general nodes? Which OS?
 
 	corenodes = templatedeets.project_corenodes
@@ -138,61 +152,62 @@ def launch_project(id):
 	
 
 	extra = templatedeets.project_extratraffic
-	insider = templatedeets.insider_threat 
-	outsider = templatedeets.outsider_threat 
+	insider = templatedeets.insider_threat
+	outsider = templatedeets.outsider_threat
 
-	#contstants for the lab setup, servers with fixed IP
+    #contstants for the lab setup, servers with fixed IP
 
-	#External
+	#External (get these from the Database or a config file since they are constant)
 	webserverip = '131.250.250.3' #internex
 	elasticip = '192.168.150.2'
 	networkadminip = '192.168.100.9'
 	
-	#Internal Servers with Fixed IP
+    #Internal Servers with Fixed IP
 	dhcp = '192.168.100.2' #nsserver
 
-	#Internal server
+    #Internal server
 	coreop = templatename + ".smebox.net"
 
-	# #internal workstation range as set up and received from KVM
+    # #internal workstation range as set up and received from KVM
+	
 	workstations = "4-19" #this is an example generated IP for an SME with 15 workstations, Ip address starts from 4 after the coreop 192.168.0.4-19
 
 	domain = fxn.topostart(templatename,netadminos)
 
-	time.sleep(30)
+	time.sleep(10)
 
 	if corenodes:
 		core_workstations = fxn.core_workstation_start(templatename,corenodes,coreos)
 
-	time.sleep(30)
+	time.sleep(10)
 	if generalnodes:
 		general_workstations = fxn.general_workstation_start(generalnodes,generalos)
 
 	#time.sleep(360)
 
 	#domain = 1
-	if domain  and general_workstations and core_workstations:
+	if domain:
 
 		#start the  workstations and malicious users
 
 	#insert into db (instance table)
-	 	myinstance = ProjectInstance(instance_projectid =projectid)
+		myinstance = ProjectInstance(instance_projectid =projectid)
 
-	 	db.session.add(myinstance)
-	 	db.session.commit()
-			
-	 	instanceid = myinstance.instance_id
+		db.session.add(myinstance)
+		db.session.commit()
 
-	 	myinstid = str(instanceid)
+		instanceid = myinstance.instance_id
 
-	 	msgstr = "Please wait while your machines are being set up for the experiment <b>" + projectname + "</b> ...<br><br>" 
+		myinstid = str(instanceid)
 
-	 	return(jsonify({'text': msgstr, 'id': myinstid}))
+		msgstr = "Please wait while your machines are being set up for the experiment <b>" + projectname + "</b> ...<br><br>"
+
+		return jsonify({'text':msgstr, 'id': myinstid})
 	else:
 		msgstr = "Oops, we could not launch the experiment: <b>" + projectname + "</b>, at this time as the machines didn't start. Please try again"
-		return(jsonify({'text': msgstr, 'id': 0}))
+		return jsonify({'text': msgstr, 'id': 0})
 		#TODO shut down any machine that might have started
-	 	
+
 	
 
 ##Displays the ongoing instance and its parameters

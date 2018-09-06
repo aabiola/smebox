@@ -88,8 +88,6 @@ class Task(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     task_shortname = db.Column(db.String(60), index=True, unique=True)
-    task_function = db.Column(db.String(60))
-    task_filename = db.Column(db.String(60))
     task_purpose = db.Column(db.String(128))
     task_catid = db.Column(db.Integer, db.ForeignKey('sec_category.id'))
      
@@ -106,7 +104,7 @@ class Category(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     cat_name = db.Column(db.String(60), unique=True)
-   
+    cat_publish = db.Column(db.Integer)
     #relationships 
     categories = db.relationship('Task', backref='category',lazy='dynamic')
     indus = db.relationship('Industry', backref='cat', lazy=True, uselist=False)

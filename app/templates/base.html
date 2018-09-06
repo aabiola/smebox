@@ -43,6 +43,7 @@ legend{
                         <li><a href="{{ url_for('profile.projectlisting') }}"><i class="fa fa-tasks" aria-hidden="true"></i><span class="hidden-xs hidden-sm">My Experiments</span></a></li>
                         <li><a href="{{ url_for('profile.report') }}"><i class="fa fa-bar-chart" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Reports</span></a></li>
                         <li><a href="{{ url_for('profile.report') }}"><i class="fa fa-cog" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Setting</span></a></li>
+                        <li><a href="javascript:void(0)" onclick="return confirm('Are you sure you want to delete your Account?');" style="color: #dc3545;" ><i class="fa fa-trash" aria-hidden="true"></i><span class="hidden-xs hidden-sm" >Delete My Account</span></a></li>
                     
                     </ul>
                 </div>
@@ -161,8 +162,8 @@ legend{
       <select class='form-control' name='projindustry' id="projindustry">
       <option value='' selected="selected">Enterprise Template</option>
       <option value='1'>Software Development</option>
-      <option value='2'>Finance</option>
-      <option value='3'>Law/Research/Education</option>
+      <option value='2'>Surgery (Health)</option>
+      <option value='3'>Law firm</option>
       </select>
     </div>
     <label for="inputbandwidth" class="col-sm-2 control-label">Bandwidth Delay</label>
@@ -233,7 +234,7 @@ legend{
 </div>
   </fieldset>
   
-  <fieldset><legend><h4>Network Admin Platform </h4></legend>
+  <!-- <fieldset><legend><h4>Network Admin Platform </h4></legend>
   <p class="text-muted">You will have access to some monitoring tools here, please choose your favourite Operating System</p>
  <div class="form-group">
   <div class="col-sm-1">
@@ -253,7 +254,35 @@ legend{
 
 </div>
 
+  </fieldset> -->
+
+  <fieldset><legend><h4><div class="col-sm-1">
+  <input type="checkbox" name="netplat" id="netplat" value="1" onclick="showMore()"> 
+  </div>Create a System for Network Admin  </h4> </legend>
+   
+  <!-- <p class="text-muted">This option specifies if a bare machine will be provisioned where the Administrator can  install their tools, please choose your favourite Operating System</p> -->
+
+ <div class="form-group" style='display:none;' id="morediv">
+  <div class="col-sm-1">
+  <input type="radio" name="networkadminos" id="networkadminos" value="Windows"> 
+  </div>
+ <div class="col-sm-5">
+   
+   Windows Server
+   </div>
+     <div class="col-sm-1">
+  <input type="radio" name="networkadminos" id="networkadminos2" value="Linux"> 
+  </div>
+ <div class="col-sm-5">
+   
+   Linux Server
+   </div>
+
+</div>
+
   </fieldset>
+
+
   
 <div class="modal-footer">
     <button type="button" class="btn-range-invert" data-dismiss="modal" id='closebtn'>Cancel and Close</button>
@@ -386,6 +415,18 @@ $('#btnAddProject').on('click', function(e) {
 
 });
 });
+
+function showMore() {
+  // Get the checkbox
+  var checkBox = document.getElementById("netplat");
+
+  // If the checkbox is checked, display the output text
+  if (checkBox.checked == true){
+    document.getElementById("morediv").style.display='block';
+  } else {
+    document.getElementById("morediv").style.display='none';
+  }
+} 
 </script> 
 
 <!--end AJAX -->

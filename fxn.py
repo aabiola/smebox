@@ -1,61 +1,51 @@
-def domstart(domainName):
-	import libvirt
-	conn = libvirt.open('qemu:///system')	
-	dom = conn.lookupByName(domainName)
-	if dom.isActive():
-		msg = "Domain is already running on IP:00"
-	else:
-		dom.create()
-		msg = "Domain is now running on IP:11"
-	return msg
-
 def topostart(templateName,netAdminOs):
-	#start the machines in the order: Nameserver, Firewall+Router, Internex, Core Server, Elastic Search, NetAdmin
+    #start the machines in the order: Nameserver, Firewall+Router, Internex, Core Server, Elastic Search, NetAdmin
+    import libvirt
+    conn = libvirt.open('qemu:///system')
+    launch_status = 1
 
-	import libvirt
-	conn = libvirt.open('qemu:///system')	
-	if netAdminOs == 'Linux':
-		netadmin = 'netadmin'
-	else:
-		netadmin = 'winetadmin'
-	
-	#Nameserver =ns1
-	try:
-		ns1 = conn.lookupByName('ns1')
-		if not ns1.isActive():
-			ns1.create()
+    if netAdminOs == 'Linux':
+        netadmin = 'netadmin'
+    else:
+        netadmin = 'winetadmin'
 
-		#NAT+Router =fireserve
-		natrouter = conn.lookupByName('ipnat')
-		if not natrouter.isActive():
-			natrouter.create()
+    #try:
+    ns1 = conn.lookupByName('ns1')
+    if not ns1.isActive():
+        ns1.create()
+    #NAT+Router =fireserve
+    natrouter = conn.lookupByName('ipnat')
+    if not natrouter.isActive():
+        natrouter.create()
 
+    #Internet =internex
+    internet = conn.lookupByName('internext')
+    if not internet.isActive():
+        internet.create()
 
-		#Internet =internex
-		internet = conn.lookupByName('internext')
-		if not internet.isActive():
-			internet.create()
+    #Template Organisation =temp
 
-		#Template Organisation =temp
-		temp = conn.lookupByName(templateName)
-		if not temp.isActive():
-			temp.create()
-		
-		#Elastic Search =elastic
-		elk = conn.lookupByName('elk')
-		if not elk.isActive():
-			elk.create()
+    temp = conn.lookupByName(templateName)
+    if not temp.isActive():
+        temp.create()
 
-		
-		#Network Admin Tool =netadmin
-		networkadmin = conn.lookupByName(netadmin)
-		if not networkadmin.isActive():
-			networkadmin.create()
+    #Elastic Search =elastic
 
-		launch_status = 1
-	except libvirt.libvirtError:
-		launch_status = 0
-	return launch_status
+    elk = conn.lookupByName('elk')
+    if not elk.isActive():
+        elk.create()
+
+    #Network Admin Tool =netadmin
+
+    networkadmin = conn.lookupByName(netadmin)
+    if not networkadmin.isActive():
+        networkadmin.create()
+    # except libvirt.libvirtError:
+    #   launch_status = 0
+    #   raise libvirt.virGetLastError()
+
+      #TODO stop any machine that might have been started (roll back)
+    return launch_status
 
 
 
@@ -268,21 +258,14 @@ def general_workstation_start(generalnodes,generalos):
     </memballoon>
   </devices>
 </domain>""" % (varname, m)
-	
-  
     dom = conn.createXML(xmlconfig, 0)
-		
-		# if conn == None:
-		# 	print('Failed to open connection to qemu:///system', file=sys.stderr)
-		# 	exit(1)
-		# dom = conn.createXML(xmlconfig, 0)
-		# if dom == None:
-		# 	print('Failed to create a domain from an XML definition.', file=sys.stderr)
-		# 	exit(1)
-		# 	print('Guest '+dom.name()+' has booted', file=sys.stderr)
 
-  conn.close()
-  return dom
+    if dom == None:
+      ret = 0
+    else:
+      ret = 1
+  conn.close();
+  return ret;
 
 def core_workstation_start(templatename,corenodes,coreos):
   total = int(corenodes) + 1
@@ -301,7 +284,7 @@ def core_workstation_start(templatename,corenodes,coreos):
       elif templatename=='bankserver':
         m = '/var/lib/libvirt/images/'+'win8-bank'+str(i)+'.qcow2'
 
-      elif templatename=='smedata':
+      elif templatename=='ftpserve':
         m = '/var/lib/libvirt/images/'+'win8-data'+str(i)+'.qcow2'
       
       xmlconfig = """<domain type='kvm'>
@@ -428,7 +411,7 @@ def core_workstation_start(templatename,corenodes,coreos):
         m = '/var/lib/libvirt/images/'+'ubuntu16-dev'+str(i)+'.qcow2'
       elif templatename=='bankserver':
         m = '/var/lib/libvirt/images/'+'ubuntu16-bank'+str(i)+'.qcow2'
-      elif templatename=='smedata':
+      elif templatename=='ftpserve':
         m = '/var/lib/libvirt/images/'+'ubuntu16-data'+str(i)+'.qcow2'
       xmlconfig = """<domain type='kvm'>
       <name> %s</name>
@@ -542,13 +525,16 @@ def core_workstation_start(templatename,corenodes,coreos):
     #   print('Failed to open connection to qemu:///system', file=sys.stderr)
     #   exit(1)
     # dom = conn.createXML(xmlconfig, 0)
-    # if dom == None:
+    if dom == None:
+      ret = 0
+    else:
+      ret = 1
     #   print('Failed to create a domain from an XML definition.', file=sys.stderr)
     #   exit(1)
     #   print('Guest '+dom.name()+' has booted', file=sys.stderr)
 
   conn.close()
-  return dom
+  return ret
 
 
 def topostop(templateName):

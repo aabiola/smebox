@@ -12,8 +12,13 @@
 
                             <div class="sales">
                                 <h2>Your Recent Experiment</h2><br><br>
+{% if someprojects %}
 <p>{{ someprojects[0].project_name }}</p>
-                               <canvas id="myChart" width="300" height="300"></canvas>
+ <canvas id="myChart" width="300" height="300"></canvas>
+  {% else %}
+  <div class='alert alert-info'>No Experiment Found</div>
+{% endif %}
+                              
                             </div> 
                             
                         </div>
@@ -24,24 +29,32 @@
                                  
                                  <div class="table-responsive">
                                 <table class="table">
-                                     <tr>
+                                    
+
+                                    {% if someprojects %}
+                                     {%    for someprojects in someprojects %}
+                                      <tr>
                                         <th>Experiment</th>
                                         <th>Created</th>
                                         <th>Usage</th>
                                     </tr>
-
-                                    {% for someprojects in someprojects %}
                                     <tr>
                                         <td>{{ someprojects.project_name }} </td>
                                         <td>{{ someprojects.project_datesetup.strftime("%c") }}</td>
                                         <td><a href="#" class="btn btn-warning">0</a></td>
                                     </tr>
                                     {% endfor %}
-                                <tr>
+                                    {% else %}
+                                     <tr>
+                                        <td colspan="3"><div class='alert alert-info'>No Experiment Found</div></td>
+                                       
+                                    </tr>
+                                    {% endif %}
+                               <!--  <tr>
                                 <td>Testing Wireshark Capture on Low Bandwidth</td>
                                 <td>June 19, 2018</td>
                                 <td><a href="#" class="btn btn-success">5</a></td>
-                                </tr>
+                                </tr> -->
                                
                                 </table>
                                 </div>

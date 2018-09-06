@@ -119,7 +119,7 @@
  <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
     
-      <!-- Modal content-->
+      <!-- Modal content TO DO: Make this form dynamic, select tasks from the database based on the template-->
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -131,47 +131,43 @@
 
 
 <div class="col-xs-12 col-sm-12">              
-  <div class="checkbox">
-    <label> <input type="checkbox" checked="checked">
+ <!--  <div class="checkbox">
+    <label>  
       Connect to IDE  
     </label>
-  </div>
+  </div> -->
   
-  <div class="checkbox">
-    <label>
-      <input type="checkbox" checked="checked"> 
+ <!--  <div class="checkbox">
+    <label>      
       Push Codes to Remote Repository 
     </label>
-  </div>
+  </div> -->
    <div class="checkbox">
-    <input type="checkbox" checked="checked"> 
+    <!-- <input type="checkbox" checked="checked">  -->
     <label>
       Check HTML Designs in Browser   
     </label>
   </div>
-  </div>
-
-  <div class="col-xs-12 col-sm-12"> 
-
   <div class="checkbox">
     <label>
-      <input type="checkbox" checked="checked"> 
+      
      Launch Browser
     </label>
   </div>
-  <div class="checkbox">
+
+ <!--  <div class="checkbox">
     <label>
 
 Edit Word Document and Push to FTP Server
     </label>
-  </div>
+  </div> -->
    <div class="checkbox">
     <label>
-      <input type="checkbox" checked="checked">  Run Queries against Central DB
+      Run Queries against Central DB
     </label>
   </div>
-  
-              </div>
+  </div>
+            
   </div>
                
   <h4>General Tasks</h4>
@@ -180,27 +176,27 @@ Edit Word Document and Push to FTP Server
               
   <div class="checkbox">
     <label>
-      <input type="checkbox" checked="checked"> Edit Documents
+      Edit Documents
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox"> Find and Replace on Word Document
+      Find and Replace on Word Document
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox"> Create Zipped Files from CSV
+       Create Zipped Files from CSV
     </label>
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox"> Sort Excel Sheet
+      Sort Excel Sheet
     </label>
   </div>
    <div class="checkbox">
     <label>
-      <input type="checkbox"> Arrange PDF Files
+      Arrange PDF Files
     </label>
   </div>
               </div>
@@ -220,9 +216,10 @@ Edit Word Document and Push to FTP Server
 
 <script type="text/javascript">
   function sendme(pid){
-    //alert(pid)   
+    alert(pid)
       $.ajax({
         type: "GET",
+        dataType:'json',
         url: "http://127.0.0.1:5000/profile/launch/" + pid,
         beforeSend:function(){},
         success: function(msg){
@@ -238,10 +235,7 @@ Edit Word Document and Push to FTP Server
 
             setTimeout(function(){
               document.location.href="http://127.0.0.1:5000/profile/instances/"+projectid
-            }, 180000);
-
-          
-           
+            }, 180000);           
            
           }else{
             $('#feedback').html(text)
@@ -250,8 +244,10 @@ Edit Word Document and Push to FTP Server
           }
           
         },
-        error: function(error) {
-                console.log(error);
+        error: function(err) {
+          alert(err);
+                console.log(err.text);
+                console.log(err);
         }
       });
     }
