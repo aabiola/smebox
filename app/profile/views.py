@@ -112,6 +112,7 @@ def projectlisting():
     return render_template('profile/project.html', title="All Projects", active='active', myprojects=allprojects)
 
 
+
 @profile.route('/launch/<int:id>', methods=['GET'])
 @login_required
 def launch_project(id):
@@ -124,10 +125,13 @@ def launch_project(id):
 	else:
 		loggedin_user = 0
 
+	#Default message
 
-    # TODO:
-	# Connect to KVM, start the network and get the relevant IP addresses for this instance
-	# Insert an instance and insert the start time, update server config and any other thing worth storing about the instance
+	msgstr = "Please wait while your machines are being set up "
+
+    # MEMO: This is the part that connects to the Libvirt API (using fxn.py) to start the machines
+    # TODO: Connect to KVM, start the network and get the relevant IP addresses for this instance
+	# DONE: After the machines all start; Insert an instance and insert the start time, update server config and any other thing worth storing about the instance
 
 	templatedeets = db.session.query(Project.project_name, Project.project_netos, Project.project_corenodes,Project.project_coreos, Project.project_generalnodes, Project.project_generalos, Project.project_extratraffic, Project.insider_threat,Project.outsider_threat,Industry.industry_serverip).join(Industry).filter(Project.project_orgid == loggedin_user).filter(Project.id == id).first()
 
@@ -137,6 +141,7 @@ def launch_project(id):
 
     # How many corenodes? Which OS?
 	# How many general nodes? Which OS?
+	# fetch information from db to usde to start the machines
 
 	corenodes = templatedeets.project_corenodes
 	coreos = templatedeets.project_coreos
@@ -170,18 +175,18 @@ def launch_project(id):
 
     # #internal workstation range as set up and received from KVM
 	
-	workstations = "4-19" #this is an example generated IP for an SME with 15 workstations, Ip address starts from 4 after the coreop 192.168.0.4-19
+	workstations = "4-19" #this is an example generated IP for an SME with 15 workstations, Ip address starts from 4 after the coreop 192.168.0.4-19, Dummy values,not used for now.
 
-	domain = fxn.topostart(templatename,netadminos)
+	domain = 1 #fxn.topostart(templatename,netadminos)
 
 	time.sleep(10)
 
 	if corenodes:
-		core_workstations = fxn.core_workstation_start(templatename,corenodes,coreos)
+		core_workstations = 1 #fxn.core_workstation_start(templatename,corenodes,coreos)
 
 	time.sleep(10)
 	if generalnodes:
-		general_workstations = fxn.general_workstation_start(generalnodes,generalos)
+		general_workstations = 1# fxn.general_workstation_start(generalnodes,generalos)
 
 	#time.sleep(360)
 
@@ -202,12 +207,14 @@ def launch_project(id):
 
 		msgstr = "Please wait while your machines are being set up for the experiment <b>" + projectname + "</b> ...<br><br>"
 
-		return jsonify({'text':msgstr, 'id': myinstid})
+		#return jsonify({'text':msgstr, 'id': myinstid})
 	else:
 		msgstr = "Oops, we could not launch the experiment: <b>" + projectname + "</b>, at this time as the machines didn't start. Please try again"
-		return jsonify({'text': msgstr, 'id': 0})
+		myinstid = 0
+		#return jsonify({'text': msgstr, 'id': 0})
 		#TODO shut down any machine that might have started
 
+	return jsonify({'text':msgstr, 'id': myinstid})
 	
 
 ##Displays the ongoing instance and its parameters
@@ -233,6 +240,24 @@ def instance_report(id):
 	return render_template('profile/visual.html', title="Details of Instance", deets=instance_deets)
 	
 
+##If project starts but there are some errors due to inability of some machines to start. Degrade gracefully by showing an error page
+@profile.route('/error')
+@login_required
+def error_report():
+	from datetime import date
+	from datetime import time
+	from datetime import datetime
+	#TODO: 
+	#fetch from tables - project, instance, industry and display the iteneries of this instance
+
+	
+	if current_user.is_authenticated:
+		loggedin_user = current_user.get_id()
+	else:
+		loggedin_user = 0
+
+	return render_template('profile/errorpage.html', title="Not All Machines Launched")
+
 @profile.route('/instance/stop/<int:id>', methods=['GET', 'POST'])
 @login_required
 def stop_instance(id):
@@ -250,7 +275,7 @@ def stop_instance(id):
 
 	templateId = 1
 
-	stop_status = fxn.topostop(templateId)
+	stop_status = 1 #fxn.topostop(templateId)
 	#loggedin_user - to ensure that users can only operate on the projects they created
 	#Send Signal to KVM...
 	if stop_status:

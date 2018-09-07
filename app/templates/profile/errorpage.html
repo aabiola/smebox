@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <!--- Begin the contents for this page --->
+
+ <style type="text/css">
+        .custab{
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 5% 0;
+    box-shadow: 3px 3px 2px #ccc;
+    transition: 0.5s;
+    }
+.custab:hover{
+    box-shadow: 3px 3px 0px transparent;
+    transition: 0.5s;
+
+    }
+    </style>
+    
+                <h1>Hello, {{ current_user.org_name }}! </h1>
+					<p class="alert alert-danger">
+                           Unfortunately, not all your machines were provisioned.... We are sorry but stuffs happen
+                    </p>
+                    <div class="row">
+                        
+                        <div class="col-md-12 col-sm-12 col-xs-12 gutter">
+
+                            <div class="salesxx" style="background-color:white;">
+
+                <ul class="list-group">
+                     <li class="list-group-item">
+                        <div class="row">
+                          
+                             
+                            <div class="col-xs-12 col-md-4 col-md-offset-4">
+                                <div>
+                                    
+                                    <div class="mic-info">
+                                       <img src="{{ url_for('static',filename='images/error.png') }}"  class="img-responsive" alt="" />
+                                    </div>
+                                     
+                                    
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </li>
+
+					<li class="list-group-item">
+					<div class='row'>
+					<div class="col-xs-10 col-md-11" style="text-align:center;">
+					<a href='{{ url_for('profile.projectlisting') }}'>Click here to Return to List of Experiment Page</a>
+                     </div>
+					 </div>
+					</li>
+					
+                </ul>
+				  
+
+                            
+                        </div>
+                    </div>
+                </div>
+           <!-- end contents for this page -->   
+
+{% endblock %}
+
+{% block additionalscript %}
+
+{% endblock %}

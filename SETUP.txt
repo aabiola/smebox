@@ -1,0 +1,47 @@
+﻿Part One
+
+To run the program without a KVM set up:
+
+cd to the folder smebox and type the following at the terminal
+
+$ export FLASK_DEBUG=1
+$ export FLASK_CONFIG=development
+$ export FLASK_APP=run.py
+$ flask run
+
+Part two
+
+To run the program with a KVM set up, you need to enable the connection to Libvirt API, the file that handles the connection is /smebox/fxn.py
+
+fxn.py is imported into the app and used in smebox/app/profile/views.py
+
+Please make the following edits in 4 places to ensure it connects to the KVM
+
+1. Change line 278
+
+stop_status = 1 #fxn.topostop(templateId)
+
+to
+
+stop_status = fxn.topostop(templateId)
+
+2. Change line 180 
+
+domain = 1 #fxn.topostart(templatename,netadminos)
+
+to 
+domain = xn.topostart(templatename,netadminos)
+
+3. Change line 185
+core_workstations = 1 #fxn.core_workstation_start(templatename,corenodes,coreos)
+to
+core_workstations = fxn.core_workstation_start(templatename,corenodes,coreos)
+
+4. Change line 189
+
+general_workstations = 1 #fxn.general_workstation_start(generalnodes,generalos)
+
+to
+general_workstations = fxn.general_workstation_start(generalnodes,generalos)
+
+Then run the commands in part one above

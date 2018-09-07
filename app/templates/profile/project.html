@@ -216,7 +216,7 @@ Edit Word Document and Push to FTP Server
 
 <script type="text/javascript">
   function sendme(pid){
-    alert(pid)
+    alert("Please Wait for project id "+pid)
       $.ajax({
         type: "GET",
         dataType:'json',
@@ -245,9 +245,18 @@ Edit Word Document and Push to FTP Server
           
         },
         error: function(err) {
-          alert(err);
-                console.log(err.text);
-                console.log(err);
+          //alert(err);
+              
+                console.log(err); // log errors so we know if some of the machines didnt start, but redirect to the page anyway
+                //display a progresss bar and sleep for 3mins before redirecting
+            $('#feedback').html("Please hold on..")
+            $('#myProgress').css('display','block')
+            $('.launchlink').css('display','none')
+            move()
+
+            setTimeout(function(){
+              document.location.href="http://127.0.0.1:5000/profile/error"
+            }, 180000);     
         }
       });
     }
