@@ -29,15 +29,15 @@
                                  
                                  <div class="table-responsive">
                                 <table class="table">
-                                    
-
-                                    {% if someprojects %}
-                                     {%    for someprojects in someprojects %}
-                                      <tr>
+                                        <tr>
                                         <th>Experiment</th>
                                         <th>Created</th>
                                         <th>Usage</th>
                                     </tr>
+
+                                    {% if someprojects %}
+                                     {%    for someprojects in someprojects %}
+                                  
                                     <tr>
                                         <td>{{ someprojects.project_name }} </td>
                                         <td>{{ someprojects.project_datesetup.strftime("%c") }}</td>

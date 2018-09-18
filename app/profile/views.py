@@ -186,7 +186,7 @@ def launch_project(id):
 
 	time.sleep(10)
 	if generalnodes:
-		general_workstations = 1# fxn.general_workstation_start(generalnodes,generalos)
+		general_workstations = 1#  fxn.general_workstation_start(generalnodes,generalos)
 
 	#time.sleep(360)
 
@@ -196,18 +196,36 @@ def launch_project(id):
 		#start the  workstations and malicious users
 
 	#insert into db (instance table)
-		myinstance = ProjectInstance(instance_projectid =projectid)
 
-		db.session.add(myinstance)
-		db.session.commit()
+	
+	  	myinstance = ProjectInstance(instance_projectid =projectid)
+	  	db.session.add(myinstance)
+	  	db.session.commit()
+			
+	  	instanceid = myinstance.instance_id
 
-		instanceid = myinstance.instance_id
+	  	myinstid = str(instanceid)
 
-		myinstid = str(instanceid)
+	  	msgstr = "Please wait while your machines are being set up for the experiment <b>" + projectname + "</b> ...<br><br>"
 
-		msgstr = "Please wait while your machines are being set up for the experiment <b>" + projectname + "</b> ...<br><br>"
 
-		#return jsonify({'text':msgstr, 'id': myinstid})
+	  	#return redirect(url_for('profile.instance_report',id=myinstid))
+
+		
+
+
+		# myinstance = ProjectInstance(instance_projectid =projectid)
+
+		# db.session.add(myinstance)
+		# db.session.commit()
+
+		# instanceid = myinstance.instance_id
+
+		# myinstid = str(instanceid)
+
+		# msgstr = "Please wait while your machines are being set up for the experiment <b>" + projectname + "</b> ...<br><br>"
+
+		# return jsonify({'text':msgstr, 'id': myinstid})
 	else:
 		msgstr = "Oops, we could not launch the experiment: <b>" + projectname + "</b>, at this time as the machines didn't start. Please try again"
 		myinstid = 0

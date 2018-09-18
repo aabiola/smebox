@@ -229,6 +229,7 @@ Edit Word Document and Push to FTP Server
           if(projectid){
             //display a progresss bar and sleep for 3mins before redirecting
             $('#feedback').html(text)
+            $('#feedback').addClass('alert alert-success')
             $('#myProgress').css('display','block')
             $('.launchlink').css('display','none')
             move()
@@ -250,11 +251,13 @@ Edit Word Document and Push to FTP Server
                 console.log(err); // log errors so we know if some of the machines didnt start, but redirect to the page anyway
                 //display a progresss bar and sleep for 3mins before redirecting
             $('#feedback').html("Please hold on..")
+            $('#feedback').addClass('alert alert-info')
             $('#myProgress').css('display','block')
             $('.launchlink').css('display','none')
             move()
 
             setTimeout(function(){
+            
               document.location.href="http://127.0.0.1:5000/profile/error"
             }, 180000);     
         }

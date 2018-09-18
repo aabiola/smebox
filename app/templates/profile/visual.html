@@ -19,7 +19,7 @@
     </style>
     
                 <h1>Hello, {{ current_user.org_name }}! </h1>
-					<p class="lead">Experiment '{{ deets.Project.project_name }}' Started at {{ deets.ProjectInstance.instance_start.strftime("%c") }} at IP Address Range: {{ deets.ProjectInstance.instance_iprange  }} <a href="{{ url_for('profile.stop_instance', id=deets.ProjectInstance.instance_id) }}" class="btn btn-danger">Stop Operation</a></p>
+					<p class="lead">Experiment '{{ deets.Project.project_name }}' Started at {{ deets.ProjectInstance.instance_start.strftime("%c") }} <a href="{{ url_for('profile.stop_instance', id=deets.ProjectInstance.instance_id) }}" class="btn btn-danger">Stop Operation</a></p>
                     <div class="row">
                         
                         <div class="col-md-12 col-sm-12 col-xs-12 gutter">
